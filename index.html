@@ -18,6 +18,16 @@
             --btn-hover: #9f8b77;
         }
 
+        :root.dark-theme {
+            --bg-color: #121212;
+            --text-color: #f9f6f2;
+            --board-bg: #3d3a33;
+            --cell-bg: rgba(238, 228, 218, 0.1);
+            --tile-color: #ffffff;
+            --btn-bg: #5a524a;
+            --btn-hover: #7b7165;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,8 +35,9 @@
         }
 
         body {
-            background-color: lavender;
+            background-color: var(--bg-color);
             color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
             font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
@@ -52,7 +63,7 @@
         h1 {
             font-size: clamp(3rem, 8vw, 4rem);
             font-weight: 800;
-            color: #776e65;
+            color: var(--text-color);
             margin: 0;
             line-height: 1;
         }
@@ -329,7 +340,7 @@
 
         .instructions {
             margin-top: 40px;
-            color: #776e65;
+            color: var(--text-color);
             line-height: 1.6;
         }
 
@@ -387,6 +398,8 @@
     <div class="container">
         <div class="header">
             <h1>2048</h1>
+            <button class="play-btn" id="theme-btn"
+                style="padding: 8px 12px; margin-right: auto; margin-left: 20px; font-size: 1.2rem;">🌓</button>
             <div class="scores-container">
                 <div class="score-box">
                     <div class="score-title">Score</div>
@@ -462,6 +475,16 @@
                 this.messageEl = document.getElementById('game-message');
                 this.messageTextEl = document.getElementById('game-message-text');
                 this.retryBtn = document.getElementById('retry-btn');
+
+                const themeBtn = document.getElementById('theme-btn');
+                const loadTheme = localStorage.getItem('2048-theme') || 'light';
+                if (loadTheme === 'dark') document.documentElement.classList.add('dark-theme');
+
+                themeBtn.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark-theme');
+                    const isDark = document.documentElement.classList.contains('dark-theme');
+                    localStorage.setItem('2048-theme', isDark ? 'dark' : 'light');
+                });
 
                 document.getElementById('new-game-btn').addEventListener('click', () => this.restart());
 
